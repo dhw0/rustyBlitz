@@ -4,6 +4,22 @@ import requests
 opgg_base_url = "https://www.op.gg/champion/{}/statistics/{}"
 raw_opgg_base_url = "https://www.op.gg/{}"
 
+def clean_role(role):
+    if role.lower().strip() == "middle":
+        return "mid"
+    elif role.lower().strip() == "bottom":
+        return "bot"
+    if role.lower().strip() == "jungle":
+        return "jungle"
+    elif role.lower().strip() == "top":
+        return "top"
+    elif role.lower().strip() == "support":
+        return "support"
+    else:
+        return None
+
+# OPGG scraper is an object that handles the scraping of runes from opgg
+# on init, it finds the most played role for a champ and automatically assigns runes for that particular role (can be overridden)
 class OPGGScraper():
     def __init__(self, champ, role_override = None):
         self.champ = champ #champ without spaces, symbols
@@ -92,10 +108,11 @@ class OPGGScraper():
             role_name = role_soup.find_all(class_="champion-stats-header__position__role")
             role_winrate = role_soup.find_all(class_="champion-stats-header__position__rate")
 
-            role_item = (role_name[0].text, role_link[0]['href'], role_winrate[0].text)
+            role_item = (clean_role(role_name[0].text), role_link[0]['href'], role_winrate[0].text)
             roles.append(role_item)
         return roles
 
     def get_best_runes(self):
+        self.runes = {"primary_type":0, "secondary_type":0, "primary": [], "secondary":[], "fragment":[]}
         self.populate_runes()
         return self.runes
