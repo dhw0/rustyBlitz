@@ -1,7 +1,8 @@
 import json
 import requests
-import psutil
 from subprocess import check_output
+import pathlib
+import sys
 
 def load_data_dragon_runes(ddpath):
     with open(ddpath, 'r') as f:
@@ -23,5 +24,11 @@ def get_lockfile_data(lockfile_path):
 
 
 def find_process_with_name_bash(process_name):
-    out = check_output(["wmic.exe", "process", "where", "caption=\"test.exe\"", "get", "commandline"])
-    print(out)
+    try:
+        out = check_output(["wmic.exe", "process", "where", "caption=\"{}\"".format(process_name), "get", "executablepath"]).decode(sys.stdout.encoding)
+        raw_windows_path = out.strip().split("\n")[1].strip()
+        posix_path = check_output(["wslpath", "-a", raw_windows_path]).decode(sys.stdout.encoding)
+        root_league_dir = pathlib.Path(posix_path.strip()).parent
+        return root_league_dir
+    except:
+        return ""
