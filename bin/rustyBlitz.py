@@ -32,7 +32,7 @@ def load_settings_from_file():
     return lockfile_data
 
 # find lockfile location either automatically or manually
-def initialize_league_location(process_scanning=True):
+def initialize_league_location(process_scanning=False):
     # attempt to automatically find the league process, else just prompt the user to input the path manually and set the settings file
     # might only work if its run on WSL
     if process_scanning:
@@ -42,31 +42,30 @@ def initialize_league_location(process_scanning=True):
             print('Found process successfully')
             return (utils.get_lockfile_data(auto_find_league_process+"/lockfile"))
         else:
-            print("Failed to find a running league instance via process scanning.")
+            print("Failed to find a running league instance via process scanning, loading from settings file instead")
             return load_settings_from_file()
     else:
         return load_settings_from_file()
 
-# completely automated rune selection
-# in a draft mode, select runes based on position in champ select
-def automatedRuneSelection():
-    lockfile_data = initialize_league_location()
-    websocket_runner(*lockfile_data)
 
 
-# manual rune selection to override automatic selection
-# Select the best runes from OPGG for champ in role
-def manualRuneSelection():
-    lockfile_data = initialize_league_location(process_scanning=False)
+# if no args are supplied, run the automated version that runs in the background
+# if champion and role are supplied, run the manual selector
+def runeSelectionRunner():
     parser = argparse.ArgumentParser()
-    parser.add_argument("champion", help="The champion you are currently playing")
-    parser.add_argument("role", choices=["mid", "bot", "jungle", "top", "support"],
+    parser.add_argument("-c", "--champion", help="The champion you are currently playing")
+    parser.add_argument("-r", "--role", choices=["mid", "bot", "jungle", "top", "support"],
                         help="Specify a role you want to play.")
+    parser.add_argument("-s", "--scan", type=bool, help="Whether or not to scan process list", default=False)
     args = parser.parse_args()
-    
-    fully_manual_rune_select(lockfile_data, args.champion.lower(), role=args.role, no_confirm=True)
-    
+    lockfile_data = initialize_league_location(args.scan)
+    #fully_manual_rune_select(lockfile_data, args.champion.lower(), role="", no_confirm=False)
+    if(args.champion == None and args.role == None):
+        print('Running automated rune selector')
+        websocket_runner(lockfile_data)
+    if(args.champion != None and args.role != None):
+        fully_manual_rune_select(lockfile_data, args.champion.lower(), role=args.role, no_confirm=True)
 
 
 if __name__ == "__main__":
-    manualRuneSelection()
+    runeSelectionRunner()

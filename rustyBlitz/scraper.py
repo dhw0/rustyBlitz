@@ -1,19 +1,21 @@
 from bs4 import BeautifulSoup
 import requests
+import string
 
 opgg_base_url = "https://www.op.gg/champion/{}/statistics/{}"
 raw_opgg_base_url = "https://www.op.gg/{}"
 
 def clean_role(role):
-    if role.lower().strip() == "middle":
+    cleaned_role = role.lower().strip()
+    if cleaned_role == "middle" or cleaned_role == "mid":
         return "mid"
-    elif role.lower().strip() == "bottom":
+    elif cleaned_role == "bottom" or cleaned_role== "bot":
         return "bot"
-    if role.lower().strip() == "jungle":
+    if cleaned_role == "jungle" or cleaned_role == "jg" or cleaned_role == "jung":
         return "jungle"
-    elif role.lower().strip() == "top":
+    elif cleaned_role == "top":
         return "top"
-    elif role.lower().strip() == "support":
+    elif cleaned_role == "support" or cleaned_role == "supp":
         return "support"
     else:
         return None
@@ -76,7 +78,7 @@ class OPGGScraper():
 
     def populate_runes(self, runes, champ, role):
 
-        page = requests.get(opgg_base_url.format(champ, role), allow_redirects=False)
+        page = requests.get(opgg_base_url.format(champ, role))
         try:
             page_soup = BeautifulSoup(page.text, 'html.parser')
             best_rune_data = page_soup.find_all(class_="perk-page-wrap")[0]
@@ -95,8 +97,7 @@ class OPGGScraper():
 
     def get_most_played_positions(self, champ):
         roles = [] # list of tuples (role, link path, winrate)
-
-        page = requests.get(raw_opgg_base_url.format("champion/{}/statistics/".format(champ)), allow_redirects=False)
+        page = requests.get(raw_opgg_base_url.format("champion/{}/statistics/".format(champ)))
         try:
             page_soup = BeautifulSoup(page.text, 'html.parser')
             possible_roles = page_soup.select("li[class*=champion-stats-header__position]")
@@ -120,10 +121,11 @@ class OPGGScraper():
     # main driver, gets best runes for champ/role
     def get_best_runes(self, champ, role_override=None):
         if(role_override == None):
-            role = self.get_optimal_role(champ)
+            role = clean_role(self.get_optimal_role(champ))
         else:
-            role = role_override
+            role = clean_role(role_override)
         runes = {"name": "AUTO: {} {}".format(champ, role), "primary_type":0, "secondary_type":0, "primary": [], "secondary":[], "fragment":[]}
+        champ = champ.translate(str.maketrans('', '', string.punctuation)).lower().strip()
         if not self.populate_runes(runes, champ, role):
             return None
         return runes
