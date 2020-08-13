@@ -2,6 +2,7 @@ import sys
 import os
 import pathlib
 curr_dir_path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
+print(curr_dir_path)
 sys.path.append(str(curr_dir_path.parent)+"/rustyBlitz")
 from rune_selector import RuneSelector
 from websocket_driver import websocket_runner
@@ -13,7 +14,7 @@ import json
 
 # manual loading of path from settings json file
 def load_settings_from_file():
-    settings_file_loc = "settings.json"
+    settings_file_loc = str(curr_dir_path)+"/settings.json"
     if not pathlib.Path(settings_file_loc).is_file():
         print("Input the install location of your League of Legends Instance.")
         print("This can be found by going to task manager --> League of legends --> dropdown --> right click --> properties --> location\n")
