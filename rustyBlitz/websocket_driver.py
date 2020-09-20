@@ -58,6 +58,8 @@ def websocket_runner(lockfile_data):
 
                 except json.decoder.JSONDecodeError as e:
                     pass
+                #except asyncio.streams.IncompleteReadError, websockets.exceptions.ConnectionClosedError:
+                #    print("Client closed.")
 
 
     asyncio.get_event_loop().run_until_complete(hello())

@@ -15,7 +15,7 @@ def clean_role(role):
         return "jungle"
     elif cleaned_role == "top":
         return "top"
-    elif cleaned_role == "support" or cleaned_role == "supp":
+    elif cleaned_role == "support" or cleaned_role == "supp" or cleaned_role == 'utility':
         return "support"
     else:
         return None
