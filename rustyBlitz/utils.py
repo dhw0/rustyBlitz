@@ -10,7 +10,7 @@ def load_data_dragon_runes(ddpath):
     return data
 
 
-def get_champ_name_from_id(champ_id, patch="10.16"):
+def get_champ_name_from_id(champ_id, patch="10.21"):
     url = "https://raw.communitydragon.org/{}/plugins/rcp-be-lol-game-data/global/default/v1/champions/{}.json".format(patch, str(champ_id))
     r = requests.get(url).json()
     return r["name"], r["alias"]
