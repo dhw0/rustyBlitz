@@ -1,20 +1,22 @@
 import sys
 import os
 import pathlib
+import argparse
+import json
+
 curr_dir_path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-print(curr_dir_path)
 sys.path.append(str(curr_dir_path.parent)+"/rustyBlitz")
+data_directory = str(curr_dir_path.parent) + "/data"
+sys.path.append(data_directory)
+
 from rune_selector import RuneSelector
 from websocket_driver import websocket_runner
 from driver import fully_manual_rune_select
 import utils
-import argparse
-import json
-
 
 # manual loading of path from settings json file
 def load_settings_from_file():
-    settings_file_loc = str(curr_dir_path)+"/settings.json"
+    settings_file_loc = data_directory+"/settings.json"
     if not pathlib.Path(settings_file_loc).is_file():
         print("Input the install location of your League of Legends Instance.")
         print("This can be found by going to task manager --> League of legends --> dropdown --> right click --> properties --> location\n")
@@ -23,7 +25,7 @@ def load_settings_from_file():
         with open(settings_file_loc, 'w') as fp:
             json.dump(data, fp, sort_keys=True, indent=4)
             print("\nSettings file did not exist before, creating new settings file...")
-            print("You can change the path of your League directory at this file: {}".format(str(curr_dir_path.parent)+"/bin/"+settings_file_loc))
+            print("You can change the path of your League directory at this file: {}".format(settings_file_loc))
         lockfile_data = (utils.get_lockfile_data(league_path+"/lockfile"))
     else:
         print('Settings file exists, loading in data from lockfile...')
@@ -58,6 +60,8 @@ def runeSelectionRunner():
     parser.add_argument("-r", "--role", choices=["mid", "bot", "jungle", "top", "support"],
                         help="Specify a role you want to play.")
     parser.add_argument("-s", "--scan", type=bool, help="Whether or not to scan process list", default=False)
+    parser.add_argument("-b", "--backend", help="What website backend to use", default="ugg", choices = ["ugg", "opgg"])
+    parser.add_argument("-a", "--confirm", help="Ask for confirmation or not", type=bool, default=True)
     args = parser.parse_args()
     lockfile_data = initialize_league_location(args.scan)
     #fully_manual_rune_select(lockfile_data, args.champion.lower(), role="", no_confirm=False)
@@ -65,7 +69,7 @@ def runeSelectionRunner():
         print('Running automated rune selector')
         websocket_runner(lockfile_data)
     if(args.champion != None and args.role != None):
-        fully_manual_rune_select(lockfile_data, args.champion.lower(), role=args.role, no_confirm=True)
+        fully_manual_rune_select(lockfile_data, args.champion.lower(), role=args.role, no_confirm=not args.confirm, backend=args.backend)
 
 
 if __name__ == "__main__":

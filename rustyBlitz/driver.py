@@ -2,10 +2,9 @@ from rune_selector import RuneSelector
 import pprint
 pp = pprint.PrettyPrinter(depth=6)
 import sys
-from scraper import OPGGScraper
+from scraper import OPGGScraper, UGGScraper
 
-
-def fully_manual_rune_select(lockfile_data, champ, role, no_confirm=False):
+def fully_manual_rune_select(lockfile_data, champ, role, no_confirm=False, backend="opgg"):
     if(role == ""):
         role = None
     rs = RuneSelector(*lockfile_data)
@@ -13,10 +12,17 @@ def fully_manual_rune_select(lockfile_data, champ, role, no_confirm=False):
         print("automatically selecting best runes for: {}".format(champ))
     else:
         print("New rune page for {} @ {}".format(champ, role))
-    scraper = OPGGScraper()
-    best_runes = scraper.get_best_runes(champ, role_override=role)
+    if(backend == "opgg"):
+        scraper = OPGGScraper()
+    elif(backend == "ugg"):
+        scraper = UGGScraper()
+    else:
+        print("Backend not supported")
+        return
+    best_runes, error = scraper.get_best_runes(champ, role_override=role)
     if best_runes == None:
         print("Failed to get runes")
+        print(error)
         return
     post_data, page_id = rs.form_request(best_runes)
 
