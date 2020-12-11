@@ -157,33 +157,45 @@ class UGGScraper():
         self.base_url = "https://u.gg/lol/champions/{}/runes" # for default most played role
         self.base_url_role = "https://u.gg/lol/champions/{}/runes?role={}" # for a specific role
 
+
+    def _rune_parser(self, raw_rune_text, prefix, suffix):
+        lower_all_alnum = ''.join(e for e in raw_rune_text if e.isalnum()).lower() 
+        end = -1 * len(suffix)
+        if(end == 0):
+            end = len(lower_all_alnum)
+        start = len(prefix)
+        if(prefix != "" and lower_all_alnum.find(prefix) == -1):
+            return ""
+        if(suffix != "" and lower_all_alnum.find(suffix) == -1):
+            return ""
+        rune_name = os.path.basename(lower_all_alnum)[start:end].strip()
+        cleaned = ''.join(e for e in rune_name if e.isalnum()).lower() 
+        if(cleaned == "adaptiveforce"):
+            return "adaptive"
+        return cleaned
+
     def get_rune_id(self, div, prefix="", suffix=""):
         rune_image_link = BeautifulSoup(str(div), 'html.parser').find_all("img")
         rune_url = rune_image_link[0]['src']
         rune_name = os.path.basename(rune_url)[len(prefix):-1*len(suffix)]
+
+        cleaned_name_from_alt = self._rune_parser(rune_image_link[0]['alt'], prefix=prefix, suffix=suffix)
         try:
-            cleaned = rune_name.strip().lower()
-            if(cleaned == "adaptiveforce"):
-                cleaned = "adaptive"
-            if(cleaned in RUNE_DICTIONARY['name_to_id']):
-                return RUNE_DICTIONARY['name_to_id'][cleaned]
-            else:
-                rune_url = rune_image_link[0]['alt']
-                pref = "The Rune"
-                tmp = os.path.basename(rune_url)[rune_url.find(pref)+len(pref):].strip()
-                rune_name = ''.join(e for e in tmp if e.isalnum()).lower() 
-                return RUNE_DICTIONARY['name_to_id'][rune_name]
+            rune_id = RUNE_DICTIONARY['name_to_id'][cleaned_name_from_alt]
+            return rune_id
         except KeyError as e:
+            print('Failed to parse: ', rune_image_link[0]['alt'])
+            print('Got: ', cleaned_name_from_alt)
             return -1
 
     def get_runes_from_primary_tree(self, raw_rune_html):
         res = []
         primary_tree_soup = BeautifulSoup(str(raw_rune_html), 'html.parser')
         keystone = primary_tree_soup.find_all(class_="perk keystone perk-active")
-        res.append(self.get_rune_id(keystone, suffix=".png"))
+        res.append(self.get_rune_id(keystone, prefix="thekeystone"))
         rest = primary_tree_soup.find_all(class_="perk perk-active")
         for rune in rest:
-            res.append(self.get_rune_id(rune, suffix=".png"))
+            res.append(self.get_rune_id(rune, prefix="therune"))
         style = primary_tree_soup.find_all(class_="perk-style-title")
         return {
             "primary_type":RUNE_DICTIONARY['name_to_id'][style[0].text.lower()],
@@ -195,7 +207,7 @@ class UGGScraper():
         fragment_tree_soup = BeautifulSoup(str(raw_rune_html), 'html.parser')
         rest = fragment_tree_soup.find_all(class_="shard shard-active")
         for rune in rest:
-            res.append(self.get_rune_id(rune, prefix="StatsMod", suffix="Icon.png"))
+            res.append(self.get_rune_id(rune, prefix="the", suffix="shard"))
         return {
             "fragment":res
         }
@@ -205,7 +217,7 @@ class UGGScraper():
         secondary_tree_soup = BeautifulSoup(str(raw_rune_html), 'html.parser')
         rest = secondary_tree_soup.find_all(class_="perk perk-active")
         for rune in rest:
-            res.append(self.get_rune_id(rune, suffix=".png"))
+            res.append(self.get_rune_id(rune, prefix="therune"))
         style = secondary_tree_soup.find_all(class_="perk-style-title")
         return {
             "secondary_type":RUNE_DICTIONARY['name_to_id'][style[0].text.lower()],
@@ -225,6 +237,7 @@ class UGGScraper():
         primary_rune_set = self.get_runes_from_primary_tree(primary_tree)
         secondary_rune_set = self.get_runes_from_secondary_tree(secondary_tree)
         fragment_rune_set = self.get_fragments(secondary_tree)
+
 
         rune_set = {**primary_rune_set, **secondary_rune_set, **fragment_rune_set}
         return {
