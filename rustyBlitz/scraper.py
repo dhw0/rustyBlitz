@@ -4,9 +4,6 @@ import string
 from utils import RUNE_DICTIONARY
 import os
 
-opgg_base_url = "https://www.op.gg/champion/{}/statistics/{}"
-raw_opgg_base_url = "https://www.op.gg/{}"
-
 def clean_role(role):
     if(role is None):
         return "Auto Role"
@@ -41,7 +38,8 @@ def list_runes(runes):
 # on init, it finds the most played role for a champ and automatically assigns runes for that particular role (can be overridden)
 class OPGGScraper():
     def __init__(self):
-        pass
+        self.opgg_base_url = "https://www.op.gg/champion/{}/statistics/{}"
+        self.raw_opgg_base_url = "https://www.op.gg/{}"
     # returns int rune id
     def convert_image_link_to_rune_id(self, prefix, image_link):
         idx = image_link.index(prefix)
@@ -53,16 +51,20 @@ class OPGGScraper():
         return int(image_link[idx+len(prefix):png_idx])
 
     # modifies rune datastructure in place
-    def extract_runes(self, runes, raw_rune_data):
+    def extract_runes(self, raw_rune_data):
         rune_data_primary = raw_rune_data[1:5]
-        rune_data_secondary = raw_rune_data[6:]
+        rune_data_secondary = raw_rune_data[6:10]
+
+        primary_res = []
+        secondary_res = []
         for rune_row in rune_data_primary:
             rune_row_soup = BeautifulSoup(str(rune_row), 'html.parser')
             rune_row_data = rune_row_soup.select("div[class*=active]")
             if(len(rune_row_data) > 0):
                 rune_image_link = BeautifulSoup(str(rune_row_data), 'html.parser').find_all("img")
                 rune_id = self.convert_image_link_to_rune_id("/lol/perk/", rune_image_link[0]["src"])
-                runes["primary"].append(rune_id)
+                #runes["primary"].append(rune_id)
+                primary_res.append(rune_id)
 
         for rune_row in rune_data_secondary:
             rune_row_soup = BeautifulSoup(str(rune_row), 'html.parser')
@@ -70,32 +72,52 @@ class OPGGScraper():
             if(len(rune_row_data) > 0):
                 rune_image_link = BeautifulSoup(str(rune_row_data), 'html.parser').find_all("img")
                 rune_id = self.convert_image_link_to_rune_id("/lol/perk/", rune_image_link[0]["src"])
-                runes["secondary"].append(rune_id)
-        
+                #runes["secondary"].append(rune_id)
+                secondary_res.append(rune_id)
 
-    def extract_primary_and_secondary_runes(self, runes, raw_rune_data):
+        return {
+            "primary":primary_res,
+            "secondary":secondary_res
+        }
+
+    def extract_primary_and_secondary_runes(self, raw_rune_data):
         primary_rune = raw_rune_data[0]
         secondary_rune = raw_rune_data[5]
+        primary_type = -1
+        secondary_type = -1
 
         for i, curr_rune in zip(range(2), [primary_rune, secondary_rune]):
             curr_rune_soup = BeautifulSoup(str(curr_rune), 'html.parser')
             rune_image_link = curr_rune_soup.find_all("img")
             rune_id = self.convert_image_link_to_rune_id("/lol/perkStyle/", rune_image_link[0]["src"])
             if i == 0:
-                runes["primary_type"] = rune_id
+                #runes["primary_type"] = rune_id
+                primary_type = rune_id
             else:
-                runes["secondary_type"] = rune_id
-        
-    def extract_fragment_data(self, runes, raw_fragment_data):
-        for fragment in raw_fragment_data:
+                #runes["secondary_type"] = rune_id
+                secondary_type = rune_id
+        return {
+            "primary_type": primary_type,
+            "secondary_type":secondary_type
+        }
+
+
+    def extract_fragment_data(self, raw_fragment_data):
+        fragment_res = []
+        for fragment in raw_fragment_data[:3]:
             curr_frag_soup = BeautifulSoup(str(fragment), 'html.parser')
             frag_image_link = curr_frag_soup.find_all(class_="active tip")
             rune_id = self.convert_image_link_to_rune_id("/lol/perkShard/", frag_image_link[0]["src"])
-            runes["fragment"].append(rune_id)
+            #runes["fragment"].append(rune_id)
+            fragment_res.append(rune_id)
+        return {
+            "fragment":fragment_res
+        }
 
-    def populate_runes(self, runes, champ, role):
 
-        page = requests.get(opgg_base_url.format(champ, role))
+    def populate_runes(self, champ, role):
+
+        page = requests.get(self.opgg_base_url.format(champ, role))
         try:
             page_soup = BeautifulSoup(page.text, 'html.parser')
             best_rune_data = page_soup.find_all(class_="perk-page-wrap")#[0]
@@ -104,17 +126,25 @@ class OPGGScraper():
             raw_rune_data = rune_soup.find_all(class_="perk-page__row") # main runepage data
             raw_fragment_data = rune_soup.find_all(class_="fragment__row") # fragment rune page data
 
-            self.extract_primary_and_secondary_runes(runes, raw_rune_data)
-            self.extract_runes(runes, raw_rune_data)
-            self.extract_fragment_data(runes, raw_fragment_data)
-            return True
+            rune_types = self.extract_primary_and_secondary_runes(raw_rune_data)
+            main_runes = self.extract_runes(raw_rune_data)
+            fragment_runes = self.extract_fragment_data(raw_fragment_data)
+            rune_set = {**rune_types, **main_runes, **fragment_runes}
+
+            return {
+                "rune_set":rune_set,
+                "failed":None
+            }
         except Exception as e:
             print('POPULATE_RUNES ERROR: ', e)
-            return False
+            return {
+                "rune_set":{},
+                "failed":str(e)
+            }
 
     def get_most_played_positions(self, champ):
         roles = [] # list of tuples (role, link path, winrate)
-        page = requests.get(raw_opgg_base_url.format("champion/{}/statistics/".format(champ)))
+        page = requests.get(self.raw_opgg_base_url.format("champion/{}/statistics/".format(champ)))
         try:
             page_soup = BeautifulSoup(page.text, 'html.parser')
             possible_roles = page_soup.select("li[class*=champion-stats-header__position]")
@@ -136,18 +166,20 @@ class OPGGScraper():
         return self.get_most_played_positions(champ)[0][0]
 
     # main driver, gets best runes for champ/role
-    def get_best_runes(self, champ, role_override=None):
+    def get_best_runes(self, raw_champ, role_override=None):
         if(role_override == None):
             role = clean_role(self.get_optimal_role(champ))
         else:
             role = clean_role(role_override)
-        runes = {"name": "AUTO: {} {}".format(champ, role), "primary_type":0, "secondary_type":0, "primary": [], "secondary":[], "fragment":[]}
-        champ = champ.translate(str.maketrans('', '', string.punctuation)).lower().strip()
-        if not self.populate_runes(runes, champ, role):
-            return None, "Failed to get runes"
-        print(runes)
+        champ = raw_champ.translate(str.maketrans('', '', string.punctuation)).lower().strip()
+        rune_candidates = self.populate_runes(champ, role)
+        if(rune_candidates['failed'] is not None):
+            return None, rune_candidates['failed']
+        runes = rune_candidates["rune_set"]
+        page_name = "OP.GG AUTO: {} {}".format(raw_champ, role)
+        runes["name"] = page_name
         list_runes(runes)
-        return runes, None
+        return runes, rune_candidates['failed']
 
 
 # OPGG scraper is an object that handles the scraping of runes from opgg
@@ -230,6 +262,7 @@ class UGGScraper():
             page = requests.get(self.base_url.format(champ))
         else:
             page = requests.get(self.base_url_role.format(champ, role))
+
         page_soup = BeautifulSoup(page.text, 'html.parser')
         primary_tree = page_soup.find_all(class_="rune-tree_v2 primary-tree")[0]
         secondary_tree = page_soup.find_all(class_="secondary-tree")[0]
@@ -238,7 +271,6 @@ class UGGScraper():
         secondary_rune_set = self.get_runes_from_secondary_tree(secondary_tree)
         fragment_rune_set = self.get_fragments(secondary_tree)
 
-
         rune_set = {**primary_rune_set, **secondary_rune_set, **fragment_rune_set}
         return {
             "rune_set":rune_set,
@@ -246,13 +278,13 @@ class UGGScraper():
         }
 
     # main driver, gets best runes for champ/role
-    def get_best_runes(self, champ, role_override=None):
+    def get_best_runes(self, raw_champ, role_override=None):
         role = clean_role(role_override)
-        champ = champ.translate(str.maketrans('', '', string.punctuation)).lower().strip()
+        champ = raw_champ.translate(str.maketrans('', '', string.punctuation)).lower().strip()
         rune_candidates = self.extract_runes(champ, role)
         if(rune_candidates['failed'] is not None):
             return None, rune_candidates['failed']
         runes = rune_candidates["rune_set"]
-        runes["name"] = "AUTO: {} {}".format(champ, role)
+        runes["name"] = "U.GG AUTO: {} {}".format(raw_champ, role)
         list_runes(runes)
         return runes, rune_candidates['failed']
