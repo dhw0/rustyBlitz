@@ -118,6 +118,7 @@ class OPGGScraper():
     def populate_runes(self, champ, role):
 
         page = requests.get(self.opgg_base_url.format(champ, role))
+        print(self.opgg_base_url.format(champ, role))
         try:
             page_soup = BeautifulSoup(page.text, 'html.parser')
             best_rune_data = page_soup.find_all(class_="perk-page-wrap")#[0]
@@ -167,11 +168,11 @@ class OPGGScraper():
 
     # main driver, gets best runes for champ/role
     def get_best_runes(self, raw_champ, role_override=None):
+        champ = raw_champ.translate(str.maketrans('', '', string.punctuation)).lower().strip()
         if(role_override == None):
             role = clean_role(self.get_optimal_role(champ))
         else:
             role = clean_role(role_override)
-        champ = raw_champ.translate(str.maketrans('', '', string.punctuation)).lower().strip()
         rune_candidates = self.populate_runes(champ, role)
         if(rune_candidates['failed'] is not None):
             return None, rune_candidates['failed']
@@ -201,9 +202,11 @@ class UGGScraper():
         if(suffix != "" and lower_all_alnum.find(suffix) == -1):
             return ""
         rune_name = os.path.basename(lower_all_alnum)[start:end].strip()
-        cleaned = ''.join(e for e in rune_name if e.isalnum()).lower() 
+        cleaned = ''.join(e for e in rune_name if e.isalnum()).lower()
         if(cleaned == "adaptiveforce"):
             return "adaptive"
+        if(cleaned == "magicresist"):
+            return "magicres"
         return cleaned
 
     def get_rune_id(self, div, prefix="", suffix=""):

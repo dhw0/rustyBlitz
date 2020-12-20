@@ -6,7 +6,7 @@ import sys
 import os
 
 curr_dir_path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-data_directory = str(curr_dir_path.parent) + "/data"
+data_directory = str(curr_dir_path) + "/data"
 sys.path.append(data_directory)
 
 CURR_PATCH = "latest" # "10.23"

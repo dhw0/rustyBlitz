@@ -3,6 +3,16 @@ import pprint
 pp = pprint.PrettyPrinter(depth=6)
 import sys
 from scraper import OPGGScraper, UGGScraper
+from cache import Cache
+
+def scraper_resolver(backend):
+    if(backend == "opgg"):
+        return OPGGScraper()
+    elif(backend == "ugg"):
+        return UGGScraper()
+    else:
+        return None
+
 
 def fully_manual_rune_select(lockfile_data, champ, role, no_confirm=False, backend="opgg"):
     if(role == ""):
@@ -12,12 +22,9 @@ def fully_manual_rune_select(lockfile_data, champ, role, no_confirm=False, backe
         print("automatically selecting best runes for: {}".format(champ))
     else:
         print("New rune page for {} @ {}".format(champ, role))
-    if(backend == "opgg"):
-        scraper = OPGGScraper()
-    elif(backend == "ugg"):
-        scraper = UGGScraper()
-    else:
-        print("Backend not supported")
+    scraper = scraper_resolver(backend)
+    if(scraper is None):
+        print('Backend not supported')
         return
     best_runes, error = scraper.get_best_runes(champ, role_override=role)
     if best_runes == None:
@@ -25,7 +32,6 @@ def fully_manual_rune_select(lockfile_data, champ, role, no_confirm=False, backe
         print(error)
         return
     post_data, page_id = rs.form_request(best_runes)
-
     if not no_confirm:
         agree = input("Make rune page changes to this rune page (yes/y to confirm)?\t")
         if agree.strip().lower() == "y" or agree.strip().lower() == "yes":

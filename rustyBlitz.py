@@ -4,15 +4,14 @@ import pathlib
 import argparse
 import json
 
-curr_dir_path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(str(curr_dir_path.parent)+"/rustyBlitz")
-data_directory = str(curr_dir_path.parent) + "/data"
-sys.path.append(data_directory)
-
 from rune_selector import RuneSelector
 from websocket_driver import websocket_runner
 from driver import fully_manual_rune_select
 import utils
+
+curr_dir_path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
+data_directory = str(curr_dir_path) + "/data"
+sys.path.append(data_directory)
 
 # manual loading of path from settings json file
 def load_settings_from_file():
