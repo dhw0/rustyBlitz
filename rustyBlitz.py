@@ -66,7 +66,7 @@ def runeSelectionRunner():
     #fully_manual_rune_select(lockfile_data, args.champion.lower(), role="", no_confirm=False)
     if(args.champion == None and args.role == None):
         print('Running automated rune selector')
-        websocket_runner(lockfile_data)
+        websocket_runner(lockfile_data, backend=args.backend)
     if(args.champion != None and args.role != None):
         fully_manual_rune_select(lockfile_data, args.champion.lower(), role=args.role, no_confirm=not args.confirm, backend=args.backend)
 

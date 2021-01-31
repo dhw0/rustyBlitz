@@ -31,7 +31,7 @@ def get_data_from_response(response):
     return player_pos, champ_id, assigned_role, phase, is_final_pick
 
 
-def websocket_runner(lockfile_data):
+def websocket_runner(lockfile_data, backend):
     password = lockfile_data[1]
     port = lockfile_data[0]
     url = "wss://{}:{}@127.0.0.1:{}/".format('riot', password, str(port))
@@ -54,7 +54,7 @@ def websocket_runner(lockfile_data):
                             if(is_final_pick == True and prev_champ_role != (champ_name, assigned_role)):
                                 print("Finalized pick:\n\tChamp: {}\n\tRole: {}".format(champ_name, assigned_role))
                                 prev_champ_role = (champ_name, assigned_role)
-                                fully_manual_rune_select(lockfile_data, champ_name, assigned_role, no_confirm=True)
+                                fully_manual_rune_select(lockfile_data, champ_name, assigned_role, no_confirm=True, backend = backend)
 
                 except json.decoder.JSONDecodeError as e:
                     pass

@@ -207,6 +207,8 @@ class UGGScraper():
             return "adaptive"
         if(cleaned == "magicresist"):
             return "magicres"
+        if(cleaned == "scalingcdr"):
+            return "cdrscaling"
         return cleaned
 
     def get_rune_id(self, div, prefix="", suffix=""):
