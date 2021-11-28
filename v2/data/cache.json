@@ -1,0 +1,54 @@
+{
+    "dianaaram": {
+        "expire_time": 1638334800,
+        "last_access_time": 1638075763,
+        "value": {
+            "champ": "diana",
+            "fragment": [
+                5008,
+                5008,
+                5002
+            ],
+            "primary": [
+                8128,
+                8143,
+                8138,
+                8106
+            ],
+            "primary_type": 8100,
+            "role": "aram",
+            "secondary": [
+                8009,
+                8014
+            ],
+            "secondary_type": 8000,
+            "source": "OPGG"
+        }
+    },
+    "viegoaram": {
+        "expire_time": 1638334800,
+        "last_access_time": 1638075846,
+        "value": {
+            "champ": "viego",
+            "fragment": [
+                5005,
+                5008,
+                5002
+            ],
+            "primary": [
+                8010,
+                9111,
+                9104,
+                8014
+            ],
+            "primary_type": 8000,
+            "role": "aram",
+            "secondary": [
+                8139,
+                8135
+            ],
+            "secondary_type": 8100,
+            "source": "OPGG"
+        }
+    }
+}

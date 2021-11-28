@@ -33,7 +33,6 @@ def list_runes(runes):
     for item in runes['fragment']:
         print('\t', RUNE_DICTIONARY['id_to_name'][str(item)]['detailed_name'])
 
-
 # OPGG scraper is an object that handles the scraping of runes from opgg
 # on init, it finds the most played role for a champ and automatically assigns runes for that particular role (can be overridden)
 class OPGGScraper():
@@ -116,8 +115,10 @@ class OPGGScraper():
 
 
     def populate_runes(self, champ, role):
-
-        page = requests.get(self.opgg_base_url.format(champ, role))
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36',
+        }
+        page = requests.get(self.opgg_base_url.format(champ, role), headers=headers)
         print(self.opgg_base_url.format(champ, role))
         try:
             page_soup = BeautifulSoup(page.text, 'html.parser')
@@ -263,10 +264,13 @@ class UGGScraper():
 
     # modifies rune datastructure in place
     def extract_runes(self, champ, role = None):
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36',
+        }
         if(role is None):
-            page = requests.get(self.base_url.format(champ))
+            page = requests.get(self.base_url.format(champ), headers=headers)
         else:
-            page = requests.get(self.base_url_role.format(champ, role))
+            page = requests.get(self.base_url_role.format(champ, role), headers=headers)
 
         page_soup = BeautifulSoup(page.text, 'html.parser')
         primary_tree = page_soup.find_all(class_="rune-tree_v2 primary-tree")[0]
