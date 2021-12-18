@@ -13,12 +13,14 @@ class ClientInterface():
 
     def post_rune_page_data(self, best_runes):
         post_data, page_id = self._form_request(best_runes)
+        print("[CLIENT INTERFACE]: \t page id:", page_id)
         client_post_url = (self.base_url+"{}").format("/lol-perks/v1/pages/{}".format(str(page_id)))
         r = requests.put(client_post_url, verify=False, auth=self.auth_header, json=post_data)
         return r
 
     def _form_request(self, best_runes):
         page_id = self._get_current_rune_page_data()["id"]
+        # 1616777463
         data = {}
         data["name"] =  best_runes["source"] + ": " + best_runes["champ"] +" "+ best_runes["role"]
         data["primaryStyleId"] = best_runes["primary_type"]

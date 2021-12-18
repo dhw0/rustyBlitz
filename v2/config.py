@@ -28,6 +28,8 @@ def get_latest_patch_version():
 
 CURR_PATCH_CDRAGON = "latest"
 CURR_PATCH_DDRAGON = get_latest_patch_version()
+print("[CONFIG]:\t CDRAGON Patch Value: ", CURR_PATCH_CDRAGON)
+print("[CONFIG]:\t DDRAGON Patch Value: ", CURR_PATCH_DDRAGON)
 
 def load_champ_data(champ_data_file_name="/champ_data.json"):
     print("[CONFIG]:\t Loading champ data")
@@ -82,7 +84,10 @@ def load_rune_data(rune_data_file_name="/rune_data.json"):
     for rune in r:
         item_id = rune['id']
         cleaned_name = strip_punctuation(rune['name']).lower()
-        rune_data_dict['id_to_name'][item_id] = cleaned_name
+        if (item_id not in rune_data_dict['id_to_name']):
+            rune_data_dict['id_to_name'][item_id] = {}
+        rune_data_dict['id_to_name'][item_id]["cleaned_name"] = cleaned_name
+        rune_data_dict['id_to_name'][item_id]["raw_name"] = rune['name']
         rune_data_dict['name_to_id'][cleaned_name] = item_id
 
     write_dict_to_file(rune_data_dict, rune_data_file_path)

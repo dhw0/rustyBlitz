@@ -1,101 +1,389 @@
 {
     "id_to_name": {
-        "5001": "healthscaling",
-        "5002": "armor",
-        "5003": "magicres",
-        "5005": "attackspeed",
-        "5007": "cdrscaling",
-        "5008": "adaptive",
-        "7000": "template",
-        "8004": "thebrazenperfect",
-        "8005": "presstheattack",
-        "8006": "theeternalchampion",
-        "8007": "thesavant",
-        "8008": "lethaltempo",
-        "8009": "presenceofmind",
-        "8010": "conqueror",
-        "8014": "coupdegrace",
-        "8016": "themercilesselite",
-        "8017": "cutdown",
-        "8021": "fleetfootwork",
-        "8105": "relentlesshunter",
-        "8106": "ultimatehunter",
-        "8109": "thewickedmaestro",
-        "8112": "electrocute",
-        "8114": "theimmortalbutcher",
-        "8115": "theaetherblade",
-        "8120": "ghostporo",
-        "8124": "predator",
-        "8126": "cheapshot",
-        "8127": "thetwistedsurgeon",
-        "8128": "darkharvest",
-        "8134": "ingenioushunter",
-        "8135": "ravenoushunter",
-        "8136": "zombieward",
-        "8138": "eyeballcollection",
-        "8139": "tasteofblood",
-        "8143": "suddenimpact",
-        "8205": "theincontestablespellslinger",
-        "8207": "thecryptic",
-        "8208": "theancientone",
-        "8210": "transcendence",
-        "8214": "summonaery",
-        "8220": "thecalamity",
-        "8224": "nullifyingorb",
-        "8226": "manaflowband",
-        "8229": "arcanecomet",
-        "8230": "phaserush",
-        "8232": "waterwalking",
-        "8233": "absolutefocus",
-        "8234": "celerity",
-        "8236": "gatheringstorm",
-        "8237": "scorch",
-        "8242": "unflinching",
-        "8275": "nimbuscloak",
-        "8299": "laststand",
-        "8304": "magicalfootwear",
-        "8306": "hextechflashtraption",
-        "8313": "perfecttiming",
-        "8316": "miniondematerializer",
-        "8318": "theruthlessvisionary",
-        "8319": "thestargazer",
-        "8320": "thetimeless",
-        "8321": "futuresmarket",
-        "8339": "celestialbody",
-        "8344": "theelegantduelist",
-        "8345": "biscuitdelivery",
-        "8347": "cosmicinsight",
-        "8351": "glacialaugment",
-        "8352": "timewarptonic",
-        "8358": "prototypeomnistone",
-        "8359": "kleptomancy",
-        "8360": "unsealedspellbook",
-        "8369": "firststrike",
-        "8401": "shieldbash",
-        "8410": "approachvelocity",
-        "8414": "thebehemoth",
-        "8415": "thearcanecolossus",
-        "8416": "theenlightenedtitan",
-        "8429": "conditioning",
-        "8430": "ironskin",
-        "8435": "mirrorshell",
-        "8437": "graspoftheundying",
-        "8439": "aftershock",
-        "8444": "secondwind",
-        "8446": "demolish",
-        "8451": "overgrowth",
-        "8453": "revitalize",
-        "8454": "theleviathan",
-        "8463": "fontoflife",
-        "8465": "guardian",
-        "8472": "chrysalis",
-        "8473": "boneplating",
-        "9101": "overheal",
-        "9103": "legendbloodline",
-        "9104": "legendalacrity",
-        "9105": "legendtenacity",
-        "9111": "triumph",
-        "9923": "hailofblades"
+        "5001": {
+            "cleaned_name": "healthscaling",
+            "raw_name": "HealthScaling"
+        },
+        "5002": {
+            "cleaned_name": "armor",
+            "raw_name": "Armor"
+        },
+        "5003": {
+            "cleaned_name": "magicres",
+            "raw_name": "MagicRes"
+        },
+        "5005": {
+            "cleaned_name": "attackspeed",
+            "raw_name": "AttackSpeed"
+        },
+        "5007": {
+            "cleaned_name": "cdrscaling",
+            "raw_name": "CDRScaling"
+        },
+        "5008": {
+            "cleaned_name": "adaptive",
+            "raw_name": "Adaptive"
+        },
+        "7000": {
+            "cleaned_name": "template",
+            "raw_name": "Template"
+        },
+        "8004": {
+            "cleaned_name": "thebrazenperfect",
+            "raw_name": "The Brazen Perfect"
+        },
+        "8005": {
+            "cleaned_name": "presstheattack",
+            "raw_name": "Press the Attack"
+        },
+        "8006": {
+            "cleaned_name": "theeternalchampion",
+            "raw_name": "The Eternal Champion"
+        },
+        "8007": {
+            "cleaned_name": "thesavant",
+            "raw_name": "The Savant"
+        },
+        "8008": {
+            "cleaned_name": "lethaltempo",
+            "raw_name": "Lethal Tempo"
+        },
+        "8009": {
+            "cleaned_name": "presenceofmind",
+            "raw_name": "Presence of Mind"
+        },
+        "8010": {
+            "cleaned_name": "conqueror",
+            "raw_name": "Conqueror"
+        },
+        "8014": {
+            "cleaned_name": "coupdegrace",
+            "raw_name": "Coup de Grace"
+        },
+        "8016": {
+            "cleaned_name": "themercilesselite",
+            "raw_name": "The Merciless Elite"
+        },
+        "8017": {
+            "cleaned_name": "cutdown",
+            "raw_name": "Cut Down"
+        },
+        "8021": {
+            "cleaned_name": "fleetfootwork",
+            "raw_name": "Fleet Footwork"
+        },
+        "8105": {
+            "cleaned_name": "relentlesshunter",
+            "raw_name": "Relentless Hunter"
+        },
+        "8106": {
+            "cleaned_name": "ultimatehunter",
+            "raw_name": "Ultimate Hunter"
+        },
+        "8109": {
+            "cleaned_name": "thewickedmaestro",
+            "raw_name": "The Wicked Maestro "
+        },
+        "8112": {
+            "cleaned_name": "electrocute",
+            "raw_name": "Electrocute"
+        },
+        "8114": {
+            "cleaned_name": "theimmortalbutcher",
+            "raw_name": "The Immortal Butcher"
+        },
+        "8115": {
+            "cleaned_name": "theaetherblade",
+            "raw_name": "The Aether Blade"
+        },
+        "8120": {
+            "cleaned_name": "ghostporo",
+            "raw_name": "Ghost Poro"
+        },
+        "8124": {
+            "cleaned_name": "predator",
+            "raw_name": "Predator"
+        },
+        "8126": {
+            "cleaned_name": "cheapshot",
+            "raw_name": "Cheap Shot"
+        },
+        "8127": {
+            "cleaned_name": "thetwistedsurgeon",
+            "raw_name": "The Twisted Surgeon"
+        },
+        "8128": {
+            "cleaned_name": "darkharvest",
+            "raw_name": "Dark Harvest"
+        },
+        "8134": {
+            "cleaned_name": "ingenioushunter",
+            "raw_name": "Ingenious Hunter"
+        },
+        "8135": {
+            "cleaned_name": "ravenoushunter",
+            "raw_name": "Ravenous Hunter"
+        },
+        "8136": {
+            "cleaned_name": "zombieward",
+            "raw_name": "Zombie Ward"
+        },
+        "8138": {
+            "cleaned_name": "eyeballcollection",
+            "raw_name": "Eyeball Collection"
+        },
+        "8139": {
+            "cleaned_name": "tasteofblood",
+            "raw_name": "Taste of Blood"
+        },
+        "8143": {
+            "cleaned_name": "suddenimpact",
+            "raw_name": "Sudden Impact"
+        },
+        "8205": {
+            "cleaned_name": "theincontestablespellslinger",
+            "raw_name": "The Incontestable Spellslinger"
+        },
+        "8207": {
+            "cleaned_name": "thecryptic",
+            "raw_name": "The Cryptic"
+        },
+        "8208": {
+            "cleaned_name": "theancientone",
+            "raw_name": "The Ancient One"
+        },
+        "8210": {
+            "cleaned_name": "transcendence",
+            "raw_name": "Transcendence"
+        },
+        "8214": {
+            "cleaned_name": "summonaery",
+            "raw_name": "Summon Aery"
+        },
+        "8220": {
+            "cleaned_name": "thecalamity",
+            "raw_name": "The Calamity"
+        },
+        "8224": {
+            "cleaned_name": "nullifyingorb",
+            "raw_name": "Nullifying Orb"
+        },
+        "8226": {
+            "cleaned_name": "manaflowband",
+            "raw_name": "Manaflow Band"
+        },
+        "8229": {
+            "cleaned_name": "arcanecomet",
+            "raw_name": "Arcane Comet"
+        },
+        "8230": {
+            "cleaned_name": "phaserush",
+            "raw_name": "Phase Rush"
+        },
+        "8232": {
+            "cleaned_name": "waterwalking",
+            "raw_name": "Waterwalking"
+        },
+        "8233": {
+            "cleaned_name": "absolutefocus",
+            "raw_name": "Absolute Focus"
+        },
+        "8234": {
+            "cleaned_name": "celerity",
+            "raw_name": "Celerity"
+        },
+        "8236": {
+            "cleaned_name": "gatheringstorm",
+            "raw_name": "Gathering Storm"
+        },
+        "8237": {
+            "cleaned_name": "scorch",
+            "raw_name": "Scorch"
+        },
+        "8242": {
+            "cleaned_name": "unflinching",
+            "raw_name": "Unflinching"
+        },
+        "8275": {
+            "cleaned_name": "nimbuscloak",
+            "raw_name": "Nimbus Cloak"
+        },
+        "8299": {
+            "cleaned_name": "laststand",
+            "raw_name": "Last Stand"
+        },
+        "8304": {
+            "cleaned_name": "magicalfootwear",
+            "raw_name": "Magical Footwear"
+        },
+        "8306": {
+            "cleaned_name": "hextechflashtraption",
+            "raw_name": "Hextech Flashtraption"
+        },
+        "8313": {
+            "cleaned_name": "perfecttiming",
+            "raw_name": "Perfect Timing"
+        },
+        "8316": {
+            "cleaned_name": "miniondematerializer",
+            "raw_name": "Minion Dematerializer"
+        },
+        "8318": {
+            "cleaned_name": "theruthlessvisionary",
+            "raw_name": "The Ruthless Visionary"
+        },
+        "8319": {
+            "cleaned_name": "thestargazer",
+            "raw_name": "The Stargazer"
+        },
+        "8320": {
+            "cleaned_name": "thetimeless",
+            "raw_name": "The Timeless"
+        },
+        "8321": {
+            "cleaned_name": "futuresmarket",
+            "raw_name": "Future's Market"
+        },
+        "8339": {
+            "cleaned_name": "celestialbody",
+            "raw_name": "Celestial Body"
+        },
+        "8344": {
+            "cleaned_name": "theelegantduelist",
+            "raw_name": "The Elegant Duelist "
+        },
+        "8345": {
+            "cleaned_name": "biscuitdelivery",
+            "raw_name": "Biscuit Delivery"
+        },
+        "8347": {
+            "cleaned_name": "cosmicinsight",
+            "raw_name": "Cosmic Insight"
+        },
+        "8351": {
+            "cleaned_name": "glacialaugment",
+            "raw_name": "Glacial Augment"
+        },
+        "8352": {
+            "cleaned_name": "timewarptonic",
+            "raw_name": "Time Warp Tonic"
+        },
+        "8358": {
+            "cleaned_name": "prototypeomnistone",
+            "raw_name": "Prototype: Omnistone"
+        },
+        "8359": {
+            "cleaned_name": "kleptomancy",
+            "raw_name": "Kleptomancy"
+        },
+        "8360": {
+            "cleaned_name": "unsealedspellbook",
+            "raw_name": "Unsealed Spellbook"
+        },
+        "8369": {
+            "cleaned_name": "firststrike",
+            "raw_name": "First Strike"
+        },
+        "8401": {
+            "cleaned_name": "shieldbash",
+            "raw_name": "Shield Bash"
+        },
+        "8410": {
+            "cleaned_name": "approachvelocity",
+            "raw_name": "Approach Velocity"
+        },
+        "8414": {
+            "cleaned_name": "thebehemoth",
+            "raw_name": "The Behemoth"
+        },
+        "8415": {
+            "cleaned_name": "thearcanecolossus",
+            "raw_name": "The Arcane Colossus"
+        },
+        "8416": {
+            "cleaned_name": "theenlightenedtitan",
+            "raw_name": "The Enlightened Titan"
+        },
+        "8429": {
+            "cleaned_name": "conditioning",
+            "raw_name": "Conditioning"
+        },
+        "8430": {
+            "cleaned_name": "ironskin",
+            "raw_name": "Iron Skin"
+        },
+        "8435": {
+            "cleaned_name": "mirrorshell",
+            "raw_name": "Mirror Shell"
+        },
+        "8437": {
+            "cleaned_name": "graspoftheundying",
+            "raw_name": "Grasp of the Undying"
+        },
+        "8439": {
+            "cleaned_name": "aftershock",
+            "raw_name": "Aftershock"
+        },
+        "8444": {
+            "cleaned_name": "secondwind",
+            "raw_name": "Second Wind"
+        },
+        "8446": {
+            "cleaned_name": "demolish",
+            "raw_name": "Demolish"
+        },
+        "8451": {
+            "cleaned_name": "overgrowth",
+            "raw_name": "Overgrowth"
+        },
+        "8453": {
+            "cleaned_name": "revitalize",
+            "raw_name": "Revitalize"
+        },
+        "8454": {
+            "cleaned_name": "theleviathan",
+            "raw_name": "The Leviathan"
+        },
+        "8463": {
+            "cleaned_name": "fontoflife",
+            "raw_name": "Font of Life"
+        },
+        "8465": {
+            "cleaned_name": "guardian",
+            "raw_name": "Guardian"
+        },
+        "8472": {
+            "cleaned_name": "chrysalis",
+            "raw_name": "Chrysalis"
+        },
+        "8473": {
+            "cleaned_name": "boneplating",
+            "raw_name": "Bone Plating"
+        },
+        "9101": {
+            "cleaned_name": "overheal",
+            "raw_name": "Overheal"
+        },
+        "9103": {
+            "cleaned_name": "legendbloodline",
+            "raw_name": "Legend: Bloodline"
+        },
+        "9104": {
+            "cleaned_name": "legendalacrity",
+            "raw_name": "Legend: Alacrity"
+        },
+        "9105": {
+            "cleaned_name": "legendtenacity",
+            "raw_name": "Legend: Tenacity"
+        },
+        "9111": {
+            "cleaned_name": "triumph",
+            "raw_name": "Triumph"
+        },
+        "9923": {
+            "cleaned_name": "hailofblades",
+            "raw_name": "Hail of Blades"
+        }
     },
     "name_to_id": {
         "absolutefocus": 8233,
@@ -195,5 +483,5 @@
         "waterwalking": 8232,
         "zombieward": 8136
     },
-    "patch": "11.23.1"
+    "patch": "11.24.1"
 }

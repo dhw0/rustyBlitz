@@ -33,13 +33,13 @@ def dump_rune_page(rune):
     print("[SCRAPER]: \tDUMPING PAGE")
     print("\t\t --- primary ---")
     for primary_rune in rune["primary"]:
-        print("\t\t", config.RUNE_DATA["id_to_name"][str(primary_rune)])
+        print("\t\t  ", config.RUNE_DATA["id_to_name"][str(primary_rune)]["raw_name"])
     print("\t\t --- secondary ---")
     for secondary_rune in rune["secondary"]:
-        print("\t\t", config.RUNE_DATA["id_to_name"][str(secondary_rune)])
+        print("\t\t  ", config.RUNE_DATA["id_to_name"][str(secondary_rune)]["raw_name"])
     print("\t\t --- fragments ---")
     for fragment in rune["fragment"]:
-        print("\t\t", config.RUNE_DATA["id_to_name"][str(fragment)])
+        print("\t\t  ", config.RUNE_DATA["id_to_name"][str(fragment)]["raw_name"])
 
 # scrapers have to implement and follow this API
 class Scraper():

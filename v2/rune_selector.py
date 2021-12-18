@@ -8,8 +8,8 @@ class RuneSelector():
         self.scraper = OPGGScraper()
         self.client = ClientInterface(*lockfile_data)
 
-    def populate_runes(self, champ, role, dry_run=False):
-        rune_data = self.scraper.get_best_runes(champ, role)
+    def populate_runes(self, champ, role, dry_run=False, use_cache=True):
+        rune_data = self.scraper.get_best_runes(champ, role, cache_available=use_cache)
         resp = None
         if not dry_run:
             resp = self.client.post_rune_page_data(rune_data)
