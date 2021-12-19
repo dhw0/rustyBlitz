@@ -65,6 +65,30 @@ class OPGGScraper(Scraper):
         super().__init__()
         self._raw_opgg_base_url = "https://www.op.gg/{}"
         self._aram_opgg_base_url = "https://www.op.gg/aram/{}/statistics"
+        self._opgg_base_player_url = "https://na.op.gg/summoner/userName={}"
+        self._opgg_base_player_rune_url = "https://na.op.gg/summoner/matches/ajax/detail/builds/gameId={}&summonerId={}&moreLoad=1&"
+
+    def get_godlike_foresight(self, champ, role, user="duoking1"):
+        player_url = self._opgg_base_player_url.format(user)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36',
+        }
+        if role == "aram":
+            print("aram unsupported for now, consider returning same stuff as sr")
+            return
+        else:
+            print("searching for player {} with url ".format(user), player_url)
+            page = requests.get(player_url, headers=headers)
+        page_soup = BeautifulSoup(page.text, 'html.parser')
+        games = page_soup.find_all(class_="GameItemWrap")
+        for game in games:
+            game_item = game[0]
+            summoner_id = game_item.get("data-summoner-id")
+            # game_time = game_item.get("data-game-time")
+            game_id = game_item.get("data-game-id")
+
+            rune_url = self._opgg_base_player_rune_url.format(game_id, summoner_id)
+            rune_page = requests.get(rune_url, headers=headers)
 
     def get_best_runes(self, champ, role, debug=True, cache_available=True):
         if debug:
